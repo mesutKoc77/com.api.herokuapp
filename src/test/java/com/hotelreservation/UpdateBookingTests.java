@@ -14,18 +14,17 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 public class UpdateBookingTests extends BaseTest {
 
     @Test
-    public void testUpdate(){
+    public void testUpdate() {
 
-        createBooking("2024-10-16","2024-10-25","Ahmet","Nadir",500,true,"no need");
+        createBooking("2024-10-16", "2024-10-25", "Ahmet", "Nadir", 500, true, "no need");
 
-        JSONObject updatedBody = createBookingBody("2024-10-18","2024-10-20","Mehmet","Test",600,false,"NeeD");
+        JSONObject updatedBody = createBookingBody("2024-10-18", "2024-10-20", "Mehmet", "Test", 600, false, "NeeD");
 
-        Response response = given()
+        Response response = given(spec)
                 .contentType(ContentType.JSON)
                 .header("Cookie", "token=" + getAuthToken())
                 .body(updatedBody.toString())
-                //.log().all()
-                .put("https://restful-booker.herokuapp.com/booking/" + bookingId);
+                .put("/booking/" + bookingId);
 
         System.out.println(bookingId);
 

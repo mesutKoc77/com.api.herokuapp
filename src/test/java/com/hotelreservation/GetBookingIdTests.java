@@ -11,11 +11,11 @@ public class GetBookingIdTests extends BaseTest {
     @Test
     public void testGetBookingId() {
 
-        createBooking("24-10-2024","26-11-2024","Ahmet","Baykar",1500, false, "No needs ...");
+        createBooking("24-10-2024", "26-11-2024", "Ahmet", "Baykar", 1500, false, "No needs ...");
 
-        Response response = given()
+        Response response = given(spec)
                 .when()
-                .get("https://restful-booker.herokuapp.com/booking/"+bookingId);
+                .get("/booking/" + bookingId);
 
         response.then().statusCode(200);
         String firstname = response.jsonPath().getString("firstname");

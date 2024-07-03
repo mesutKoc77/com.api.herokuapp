@@ -1,12 +1,29 @@
 package com.hotelreservation;
 
+import io.restassured.builder.RequestSpecBuilder;
+import io.restassured.filter.log.RequestLoggingFilter;
+import io.restassured.filter.log.ResponseLoggingFilter;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
+import io.restassured.specification.RequestSpecification;
 import org.json.JSONObject;
+import org.junit.jupiter.api.BeforeEach;
+
+import java.util.Arrays;
 
 import static io.restassured.RestAssured.given;
 
 public class BaseTest {
+
+    RequestSpecification spec;
+
+    @BeforeEach
+    public void setUp() {
+        spec = new RequestSpecBuilder()
+                .setBaseUri("https://restful-booker.herokuapp.com")
+                .addFilters(Arrays.asList(new RequestLoggingFilter(), new ResponseLoggingFilter()))
+                .build();
+    }
 
     protected int bookingId;
 
@@ -16,14 +33,14 @@ public class BaseTest {
 
         JSONObject requestBody = createBookingBody(checkin, checkout, firstname, lastname, totalprice, depositpaid, additionalneeds);
 
-        Response response = given()
+        Response response = given(spec)
                 .when()
                 .contentType(ContentType.JSON)
                 .body(requestBody.toString())
-                .post("https://restful-booker.herokuapp.com/booking");
+                .post("/booking");
 
         response.then().statusCode(200);
-        bookingId=response.jsonPath().get("bookingid");
+        bookingId = response.jsonPath().get("bookingid");
         return response;
     }
 
@@ -44,17 +61,16 @@ public class BaseTest {
     }
 
 
-
     protected String getAuthToken() {
         JSONObject body = new JSONObject();
         body.put("username", "admin");
         body.put("password", "password123");
 
-        Response response = given()
+        Response response = given(spec)
                 .contentType(ContentType.JSON)
                 .body(body.toString())
                 .when()
-                .post("https://restful-booker.herokuapp.com/auth");
+                .post("/auth");
 
         response.then().statusCode(200);
         return response.jsonPath().getString("token");

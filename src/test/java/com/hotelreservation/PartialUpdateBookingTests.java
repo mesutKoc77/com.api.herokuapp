@@ -17,25 +17,22 @@ public class PartialUpdateBookingTests extends BaseTest {
         createBooking("2023-05-12", "2023-05-20", "Partial", "Update", 100, false, "JA");
 
         JSONObject partialJson = new JSONObject();
-        partialJson.put("firstname","Sezgi");
-        partialJson.put("lastname","KARA");
+        partialJson.put("firstname", "Sezgi");
+        partialJson.put("lastname", "KARA");
 
-        Response response=given()
+        Response response = given(spec)
                 .contentType(ContentType.JSON)
                 .header("Cookie", "token=" + getAuthToken())
                 .body(partialJson.toString())
                 .when()
-                .patch("https://restful-booker.herokuapp.com/booking/"+bookingId);
+                .patch("/booking/" + bookingId);
 
         JsonPath jsonResponse = response.jsonPath();
 
-        Assertions.assertEquals("Sezgi",jsonResponse.get("firstname"));
-        Assertions.assertEquals("KARA",jsonResponse.get("lastname"));
+        Assertions.assertEquals("Sezgi", jsonResponse.get("firstname"));
+        Assertions.assertEquals("KARA", jsonResponse.get("lastname"));
 
     }
-
-
-
 
 
 }
