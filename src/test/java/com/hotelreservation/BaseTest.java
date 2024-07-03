@@ -21,7 +21,7 @@ public class BaseTest {
     public void setUp() {
         spec = new RequestSpecBuilder()
                 .setBaseUri("https://restful-booker.herokuapp.com")
-                .addFilters(Arrays.asList(new RequestLoggingFilter(), new ResponseLoggingFilter()))
+                //.addFilters(Arrays.asList(new RequestLoggingFilter(), new ResponseLoggingFilter()))
                 .build();
     }
 
