@@ -6,18 +6,16 @@ import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.given;
 
-public class GetBookingIdTests extends _BaseTestForCreate {
+public class GetBookingIdTests extends BaseTest {
 
     @Test
     public void testGetBookingId() {
 
-        int bookingid = createBookingResponseBody("24-10-2024","26-11-2024","Ahmet","Baykar",1500, false, "No needs ...").get("bookingid");
-        System.out.println("bookinId " +bookingid);
-
+        createBooking("24-10-2024","26-11-2024","Ahmet","Baykar",1500, false, "No needs ...");
 
         Response response = given()
                 .when()
-                .get("https://restful-booker.herokuapp.com/booking/"+bookingid);
+                .get("https://restful-booker.herokuapp.com/booking/"+bookingId);
 
         response.then().statusCode(200);
         String firstname = response.jsonPath().getString("firstname");
