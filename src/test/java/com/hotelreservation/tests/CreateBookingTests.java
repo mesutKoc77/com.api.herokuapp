@@ -2,6 +2,7 @@ package com.hotelreservation.tests;
 
 import com.hotelreservation.models.Booking;
 import com.hotelreservation.models.BookingDates;
+import com.hotelreservation.models.BookingResponse;
 import io.restassured.http.ContentType;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
@@ -38,5 +39,12 @@ public class CreateBookingTests extends BaseTest {
                 .then()
                 .statusCode(200);
 
+        BookingResponse bookingResponse = response.as(BookingResponse.class);
+
+        Assertions.assertEquals("Udemy",bookingResponse.getBooking().getFirstname());
+
     }
+
+
+
 }
