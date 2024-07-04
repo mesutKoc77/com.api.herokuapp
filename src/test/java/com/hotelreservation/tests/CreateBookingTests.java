@@ -1,9 +1,14 @@
-package com.hotelreservation;
+package com.hotelreservation.tests;
 
+import com.hotelreservation.models.Booking;
+import com.hotelreservation.models.BookingDates;
+import io.restassured.http.ContentType;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import static io.restassured.RestAssured.given;
 
 public class CreateBookingTests extends BaseTest {
 
@@ -17,5 +22,21 @@ public class CreateBookingTests extends BaseTest {
         Assertions.assertEquals("Ali", jsonPath.get("booking.firstname"));
         Assertions.assertEquals("2024-10-12", jsonPath.get("booking.bookingdates.checkin"));
         Assertions.assertEquals(500, (Integer) jsonPath.get("booking.totalprice"));
+    }
+
+    @Test
+    public void createBookingWithPojo(){
+        BookingDates bookingDates=new BookingDates("2024-10-13","2024-10-19");
+        Booking booking=new Booking("Udemy","Kurs",500, false, bookingDates,"Wifi" );
+
+        Response response = given(spec)
+                .contentType(ContentType.JSON)
+                .body(booking)
+                .when()
+                .post("/booking");
+        response
+                .then()
+                .statusCode(200);
+
     }
 }
